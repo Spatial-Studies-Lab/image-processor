@@ -1,7 +1,9 @@
 import os
 from pathlib import Path
 import re
-from PIL import Image, ImageOps 
+from PIL import Image
+
+Image.MAX_IMAGE_PIXELS = 1000000000
 
 SIZES = {
   "thumb": 130,
@@ -12,7 +14,7 @@ SIZES = {
 for dir in os.listdir('images'):
   if os.path.isdir(os.path.join('images', dir)):
     for file in os.listdir(os.path.join('images', dir)):
-      if re.search(r"\.(tif|png|jpe?g)", file, re.IGNORECASE):
+      if re.search(r"\.(tif|png|jpe?g)$", file, re.IGNORECASE):
         path = os.path.join("output/", re.sub(r"\.(tif|png|jpe?g)", "", file, 0, re.IGNORECASE))
         Path(path).mkdir(parents=True, exist_ok=True)
         try: 
