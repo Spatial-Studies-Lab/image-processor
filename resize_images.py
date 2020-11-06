@@ -14,7 +14,7 @@ SIZES = {
 
 s3 = boto3.client('s3')
 
-images = s3.list_objects(Bucket='spatial-studies-images')
+images = s3.list_objects(Bucket=os.environ['AWS_BUCKET'])
 
 for result in images['Contents']:
   key = result['Key']
