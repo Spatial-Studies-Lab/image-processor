@@ -24,7 +24,7 @@ for result in images['Contents']:
     path = os.path.join("output/", ssid)
     with open(file, 'wb') as i:
       print('Downloading', file)
-      s3.download_fileobj('spatial-studies-images', key, i)
+      s3.download_fileobj(os.environ['AWS_BUCKET'], key, i)
       try: 
         img = Image.open(file)
         print('Resizing', file)
@@ -40,7 +40,7 @@ for result in images['Contents']:
           filename = os.path.join("output/", kind + '.jpg')
           resized.save(filename)
           print('Uploading', filename)
-          s3.upload_file(filename, 'spatial-studies-images', re.sub(r"output", ssid, filename))
+          s3.upload_file(filename, os.environ['AWS_BUCKET'], re.sub(r"output", ssid, filename))
           os.remove(filename)
       except:
         print('Could not open ' + os.path.join(dir, file))
