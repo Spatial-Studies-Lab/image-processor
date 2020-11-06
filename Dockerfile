@@ -6,11 +6,11 @@ FROM ubuntu:bionic
 RUN apt-get update
 RUN apt-get upgrade -y
 
-RUN apt-get install -y software-properties-common
+RUN apt-get install -y software-properties-common git
 
 # Install PIL dependencies
 RUN apt-get update
-RUN apt-get install -y python3-pip locales
+RUN apt-get install -y python3-pip locales libmagickwand-dev
 
 # Ensure locales configured correctly
 RUN locale-gen en_US.UTF-8
@@ -21,6 +21,6 @@ RUN echo 'alias python=python3' >> ~/.bashrc
 RUN echo 'alias pip=pip3' >> ~/.bashrc
 
 # This will install latest version of PIL
-RUN pip3 install pillow awscli
+RUN pip3 install pillow Wand boto3
 
 COPY . /
