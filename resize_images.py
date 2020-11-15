@@ -40,7 +40,7 @@ for result in images['Contents']:
           filename = os.path.join("output/", kind + '.jpg')
           resized.save(filename)
           print('Uploading', filename)
-          s3.upload_file(filename, os.environ['BUCKET_TARGET'], re.sub(r"output", ssid, filename))
+          s3.upload_file(filename, os.environ['BUCKET_TARGET'], re.sub(r"output", re.sub(r"input\/", "", ssid), filename))
           os.remove(filename)
       except:
         print('Could not open ' + os.path.join(dir, file))
