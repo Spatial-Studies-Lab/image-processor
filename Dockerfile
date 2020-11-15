@@ -24,3 +24,5 @@ RUN echo 'alias pip=pip3' >> ~/.bashrc
 RUN pip3 install pillow Wand boto3
 
 COPY . /
+
+ENTRYPOINT [ "python3", "resize_images.py" ]
