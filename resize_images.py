@@ -29,19 +29,23 @@ for result in images['Contents']:
         img = Image.open(file)
         print('Resizing', file)
         for kind in SIZES:
+          filename = os.path.join("output/", kind + '.jpg')
           maxDim = img.size.index(min(img.size))
           minDim = abs(maxDim - 1)
           ratio = SIZES[kind] / img.size[maxDim]
-          if ratio < 1:
-            size = (round(img.size[0] * ratio), round(img.size[1] * ratio))
-            resized = img.resize(size, Image.ANTIALIAS)
+          try:
+            if ratio < 1:
+              size = (round(img.size[0] * ratio), round(img.size[1] * ratio))
+              resized = img.resize(size, Image.ANTIALIAS)
+            else:
+              resized = img
+          except:
+            print('Cannot resize', filename)
           else:
-            resized = img
-          filename = os.path.join("output/", kind + '.jpg')
-          resized.save(filename)
-          print('Uploading', filename)
-          s3.upload_file(filename, os.environ['BUCKET_TARGET'], re.sub(r"output", re.sub(r"input\/", "", ssid), filename))
-          os.remove(filename)
+            resized.save(filename)
+            print('Uploading', filename)
+            s3.upload_file(filename, os.environ['BUCKET_TARGET'], re.sub(r"output", re.sub(r"input\/", "", ssid), filename))
+            os.remove(filename)
       except:
         print('Could not open ' + os.path.join(dir, file))
     print('Cleaning up', file)
