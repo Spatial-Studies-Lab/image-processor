@@ -47,6 +47,6 @@ for result in images['Contents']:
             s3.upload_file(filename, os.environ['BUCKET_TARGET'], re.sub(r"output", re.sub(r"input\/", "", ssid), filename))
             os.remove(filename)
       except:
-        print('Could not open ' + os.path.join(dir, file))
+        print('Could not open ' + file)
     print('Cleaning up', file)
     os.remove(file)
