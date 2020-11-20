@@ -30,8 +30,8 @@ images = s3.list_objects(Bucket=os.environ['BUCKET_SOURCE'])
 for result in images['Contents']:
   key = result['Key']
   if re.search(r"\.(tif|png|jpe?g)$", key, re.IGNORECASE):
-    file = re.sub(r".*\/(.*)", "input/\\1", key, re.IGNORECASE)
-    ssid = re.sub(r"\.(tif|png|jpe?g)$", "", file, re.IGNORECASE)
+    file = re.sub(r".*\/(.*)", "input/\\1", key, flags=re.IGNORECASE)
+    ssid = re.sub(r"\.(tif|png|jpe?g)$", "", file, flags=re.IGNORECASE)
     path = os.path.join("output/", ssid)
     with open(file, 'wb') as i:
       print('Downloading', file)
