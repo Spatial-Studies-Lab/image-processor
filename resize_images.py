@@ -6,6 +6,8 @@ import re
 from PIL import Image
 import boto3
 from cloudwatch import cloudwatch
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
 
 Image.MAX_IMAGE_PIXELS = 1000000000
 
@@ -24,6 +26,21 @@ handler.setFormatter(formatter)
 logger.setLevel(logging.INFO)
 logger.addHandler(handler)
 
+def error_email(message):
+  message = Mail(
+    from_email='info@axismaps.com',
+    to_emails=os.environ['EMAIL'],
+    subject='GENERATOR ERROR: ' + os.environ['PROJECT'] + ' - ' + os.environ['TASK'],
+    plain_text_content=message)
+  try:
+    sg = SendGridAPIClient(os.environ['SENDGRID_API_KEY'])
+    response = sg.send(message)
+    logger.info(response.status_code)
+    logger.info(response.body)
+    logger.info(response.headers)
+  except Exception as e:
+    print(e.message)
+    logger.warning(e.message)
 
 images = s3.list_objects(Bucket=os.environ['BUCKET_SOURCE'])
 
@@ -52,18 +69,20 @@ for result in images['Contents']:
               resized = img.resize(size, Image.ANTIALIAS)
             else:
               resized = img
-          except:
+          except Exception as e:
             print('Cannot resize', filename)
-            logger.warning('Cannot resize ' + filename)
+            logger.warning('Cannot resize ' + file + '/' + filename)
+            error_email('Cannot resize ' + file + '/' + filename + '\n\n' + repr(e))
           else:
             resized.save(filename)
             print('Uploading', filename)
             logger.info('Uploading ' + filename)
             s3.upload_file(filename, os.environ['BUCKET_TARGET'], re.sub(r"output", re.sub(r"input\/", "", ssid), filename))
             os.remove(filename)
-      except:
+      except Exception as e:
         print('Could not open ' + file)
         logger.warning('Could not open ' + file)
+        error_email('Could not open ' + file + '\n\n' + repr(e))
     print('Cleaning up', file)
     logger.info('Cleaning up ' + file)
     os.remove(file)

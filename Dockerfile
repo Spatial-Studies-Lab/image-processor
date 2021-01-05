@@ -21,7 +21,7 @@ RUN echo 'alias python=python3' >> ~/.bashrc
 RUN echo 'alias pip=pip3' >> ~/.bashrc
 
 # This will install latest version of PIL
-RUN pip3 install pillow Wand boto3 cloudwatch
+RUN pip3 install pillow Wand boto3 cloudwatch sendgrid
 
 COPY . /
 
