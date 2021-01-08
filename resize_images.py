@@ -1,15 +1,15 @@
 import os
 import time
 import logging
-from pathlib import Path
 import re
-from PIL import Image
+from PIL import Image, ImageFile
 import boto3
 from cloudwatch import cloudwatch
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 
 Image.MAX_IMAGE_PIXELS = 1000000000
+ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 SIZES = {
   "thumb": 130,
