@@ -22,7 +22,7 @@ RUN echo 'alias python=python3' >> ~/.bashrc
 RUN echo 'alias pip=pip3' >> ~/.bashrc
 
 # This will install latest version of PIL
-RUN pip3 install Wand boto3 cloudwatch sendgrid
+RUN pip3 install Wand boto3 sendgrid
 RUN pip3 install pillow --global-option="build_ext" --global-option="--enable-zlib" --global-option="--enable-jpeg" --global-option="--enable-tiff" --global-option="--enable-freetype" --global-option="--enable-webp" --global-option="--enable-webpmux" --global-option="--enable-jpeg2000"
 
 COPY . /
